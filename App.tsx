@@ -29,8 +29,11 @@ export default class App extends Component {
 
 const styles = StyleSheet.create({
   sectionContainer: {
+    flex: 1,
     marginTop: 32,
     paddingHorizontal: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   sectionTitle: {
     fontSize: 24,
