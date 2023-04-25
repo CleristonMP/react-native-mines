@@ -5,6 +5,7 @@ import {
   cloneBoard,
   createMinedBoard,
   hadExplosion,
+  invertFlag,
   openField,
   showMines,
   wonGame,
@@ -45,10 +46,22 @@ export default class App extends Component {
     }
 
     if (won) {
-      Alert.alert('Parabéns', 'Você Venceu!');
+      Alert.alert('Parabéns', 'Você venceu!');
     }
 
     this.setState({board, lost, won});
+  };
+
+  onSelectField = (row: any, column: any) => {
+    const board = cloneBoard(this.state.board);
+    invertFlag(board, row, column);
+    const won = wonGame(board);
+
+    if (won) {
+      Alert.alert('Parabéns', 'Você venceu!');
+    }
+
+    this.setState({board, won});
   };
 
   render() {
@@ -59,7 +72,11 @@ export default class App extends Component {
           Tamanho da grade: {params.getRowsAmount()}x{params.getColumnsAmount()}
         </Text>
         <View style={styles.board}>
-          <MineField board={this.state.board} onOpenField={this.onOpenField} />
+          <MineField
+            board={this.state.board}
+            onOpenField={this.onOpenField}
+            onSelectField={this.onSelectField}
+          />
         </View>
       </SafeAreaView>
     );
