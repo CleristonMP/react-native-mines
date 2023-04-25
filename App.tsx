@@ -4,6 +4,7 @@ import params from './src/params';
 import {
   cloneBoard,
   createMinedBoard,
+  flagsUsed,
   hadExplosion,
   invertFlag,
   openField,
@@ -11,6 +12,7 @@ import {
   wonGame,
 } from './src/game-logics';
 import MineField from './src/components/MineField';
+import Header from './src/components/Header';
 
 export default class App extends Component {
   constructor(props: any) {
@@ -67,10 +69,10 @@ export default class App extends Component {
   render() {
     return (
       <SafeAreaView style={styles.container}>
-        <Text>Iniciando o Mines!</Text>
-        <Text>
-          Tamanho da grade: {params.getRowsAmount()}x{params.getColumnsAmount()}
-        </Text>
+        <Header
+          flagsLeft={this.minesAmount() - flagsUsed(this.state.board)}
+          onNewGame={() => this.setState(this.createState())}
+        />
         <View style={styles.board}>
           <MineField
             board={this.state.board}
