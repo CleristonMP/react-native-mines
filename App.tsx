@@ -13,6 +13,7 @@ import {
 } from './src/game-logics';
 import MineField from './src/components/MineField';
 import Header from './src/components/Header';
+import LevelSelection from './src/screens/LevelSelection';
 
 export default class App extends Component {
   constructor(props: any) {
@@ -33,6 +34,7 @@ export default class App extends Component {
       board: createMinedBoard(rows, cols, this.minesAmount()),
       won: false,
       lost: false,
+      showLevelSelection: false,
     };
   };
 
@@ -66,12 +68,23 @@ export default class App extends Component {
     this.setState({board, won});
   };
 
+  onLevelSelected = (level: number) => {
+    params.difficultLevel = level;
+    this.setState(this.createState());
+  };
+
   render() {
     return (
       <SafeAreaView style={styles.container}>
+        <LevelSelection
+          isVisible={this.state.showLevelSelection}
+          onLevelSelected={this.onLevelSelected}
+          onCancel={() => this.setState({showLevelSelection: false})}
+        />
         <Header
           flagsLeft={this.minesAmount() - flagsUsed(this.state.board)}
           onNewGame={() => this.setState(this.createState())}
+          onFlagPress={() => this.setState({showLevelSelection: true})}
         />
         <View style={styles.board}>
           <MineField
