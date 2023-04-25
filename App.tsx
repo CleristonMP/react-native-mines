@@ -1,7 +1,14 @@
 import React, {Component} from 'react';
-import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {SafeAreaView, StyleSheet, Text, View, Alert} from 'react-native';
 import params from './src/params';
-import {createMinedBoard} from './src/game-logics';
+import {
+  cloneBoard,
+  createMinedBoard,
+  hadExplosion,
+  openField,
+  showMines,
+  wonGame,
+} from './src/game-logics';
 import MineField from './src/components/MineField';
 
 export default class App extends Component {
@@ -20,19 +27,39 @@ export default class App extends Component {
     const cols = params.getColumnsAmount();
     const rows = params.getRowsAmount();
     return {
-      board: createMinedBoard(rows, cols, this.minesAmount),
+      board: createMinedBoard(rows, cols, this.minesAmount()),
+      won: false,
+      lost: false,
     };
+  };
+
+  onOpenField = (row: any, column: any) => {
+    const board = cloneBoard(this.state.board);
+    openField(board, row, column);
+    const lost = hadExplosion(board);
+    const won = wonGame(board);
+
+    if (lost) {
+      showMines(board);
+      Alert.alert('Perdeeeeu!', 'So sad!');
+    }
+
+    if (won) {
+      Alert.alert('Parabéns', 'Você Venceu!');
+    }
+
+    this.setState({board, lost, won});
   };
 
   render() {
     return (
       <SafeAreaView style={styles.container}>
-        <Text style={styles.sectionTitle}>Iniciando o Mines!</Text>
-        <Text style={styles.sectionDescription}>
+        <Text>Iniciando o Mines!</Text>
+        <Text>
           Tamanho da grade: {params.getRowsAmount()}x{params.getColumnsAmount()}
         </Text>
         <View style={styles.board}>
-          <MineField board={this.state.board} />
+          <MineField board={this.state.board} onOpenField={this.onOpenField} />
         </View>
       </SafeAreaView>
     );
