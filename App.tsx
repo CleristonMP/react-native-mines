@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {SafeAreaView, StyleSheet, Text, View, Alert} from 'react-native';
+import {SafeAreaView, StyleSheet, View, Alert} from 'react-native';
 import params from './src/params';
 import {
   cloneBoard,
@@ -83,7 +83,7 @@ export default class App extends Component {
         />
         <Header
           flagsLeft={this.minesAmount() - flagsUsed(this.state.board)}
-          onNewGame={() => this.setState(this.createState())}
+          onNewGame={() => this.setState({showLevelSelection: true})}
           onFlagPress={() => this.setState({showLevelSelection: true})}
         />
         <View style={styles.board}>
